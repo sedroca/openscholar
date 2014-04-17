@@ -537,3 +537,36 @@ function vsite_vocab_field_formatter_view($entity_type, $entity, $field, $instan
 
   return $element;
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function vsite_vocab_form_node_form_alter(&$form, $form_state) {
+  if (empty($form['og_vocabulary'])) {
+    return;
+  }
+
+  // If the OG vocabulary is using the checkbox tree widget, we add controls to
+  // expand and collapse the checkbox tree.
+  $elements = &$form['og_vocabulary'][LANGUAGE_NONE][0];
+  foreach ($elements as $key => &$element) {
+    if (!is_int($key)) {
+      continue;
+    }
+
+    if ($element['#type'] == 'checkbox_tree') {
+      $element['#after_build'][] = 'vsite_vocab_checkbox_tree_add_controls';
+      $element['#attached']['js'][] = drupal_get_path('module', 'vsite_vocab') . '/js/vsite_vocab_checkbox_tree_controls.js';
+    }
+  }
+}
+
+/**
+ * After build; Adds expand/collapse controls to a checkbox tree.
+ */
+function vsite_vocab_checkbox_tree_add_controls($element, &$form_state) {
+  $element_id = $element['#id'];
+  $element['#prefix'] = '<span id="_' . $element_id . '" class="checkbox-tree-controls"><a class="expand-terms">' . t('Expand Terms') . '</a><a class="collapse-terms">' . t('Collapse Terms'). '</a></span>';
+  dpm($element);
+  return $element;
+}

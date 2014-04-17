@@ -899,10 +899,18 @@ ul.term-reference-tree-level {
   background: url('../images/scholarbase-sprite.png') 6px -433px no-repeat;
 }
 
+.checkbox-tree-controls {
+  float: right;
+  margin-top: 10px;
+}
 
+.checkbox-tree-controls a {
+  cursor: pointer;
+}
 
-
-
+.checkbox-tree-controls .expand-terms {
+  margin-right: 20px;
+}
 
 
 
